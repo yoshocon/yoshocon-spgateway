@@ -1,3 +1,9 @@
+# Laravel Spgateway
+[![Latest Stable Version](https://poser.pugx.org/yoshocon/laravel-spgateway/v/stable)](https://packagist.org/packages/yoshocon/laravel-spgateway)
+    [![Total Downloads](https://poser.pugx.org/yoshocon/laravel-spgateway/downloads)](https://packagist.org/packages/yoshocon/laravel-spgateway)
+    [![Latest Unstable Version](https://poser.pugx.org/yoshocon/laravel-spgateway/v/unstable)](https://packagist.org/packages/yoshocon/laravel-spgateway)
+    [![License](https://poser.pugx.org/yoshocon/laravel-spgateway/license)](https://packagist.org/packages/yoshocon/laravel-spgateway)
+
 Laravel Spgateway是一個開源的 [智付通](https://www.spgateway.com/) 非官方套件
 
 該套件參考於 [LeoChien](https://github.com/s950329/laravel-spgateway)
