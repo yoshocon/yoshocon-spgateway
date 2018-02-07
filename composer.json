@@ -1,11 +1,11 @@
 {
-    "name": "leochien/laravel-spgateway",
+    "name": "Yoshocon/laravel-spgateway",
     "description": "spgateway library for laravel",
     "keywords": ["library", "spgateway"],
     "type": "library",
     "license": "MIT",
     "authors": [{
-        "name": "LeoChien",
+        "name": "Yoshocon",
         "email": "leo@hourmasters.com"
     }],
     "require": {
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "LeoChien\\Spgateway\\": "src/"
+            "Yoshocon\\Spgateway\\": "src/"
         }
     },
     "config": {
@@ -23,11 +23,11 @@
     "extra": {
         "laravel": {
             "providers": [
-                "LeoChien\\Spgateway\\SpgatewayServiceProvider"
+                "Yoshocon\\Spgateway\\SpgatewayServiceProvider"
             ]
         },
         "aliases": {
-            "Spgateway": "LeoChien\\Spgateway\\Facades"
+            "Spgateway": "Yoshocon\\Spgateway\\Facades"
         }
     }
 }
