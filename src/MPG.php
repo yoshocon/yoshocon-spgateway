@@ -129,7 +129,7 @@ class MPG
             'MerchantID' => env('SPGATEWAY_MERCHANT_ID'),
             'TradeInfo'  => $tradeInfo,
             'TradeSha'   => $tradeSha,
-            'Version'    => '1.4',
+            'Version'    => config('spgateway.mpg.Version'),
         ];
 
         return $this;
