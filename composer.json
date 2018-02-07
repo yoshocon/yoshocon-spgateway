@@ -1,7 +1,7 @@
 {
     "name": "yoshocon/yoshocon-spgateway",
     "description": "spgateway library for laravel",
-    "keywords": ["library", "spgateway"],
+    "keywords": ["spgateway"],
     "type": "library",
     "license": "MIT",
     "authors": [{
