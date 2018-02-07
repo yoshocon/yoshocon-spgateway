@@ -1,5 +1,5 @@
 {
-    "name": "Yoshocon/laravel-spgateway",
+    "name": "yoshocon/laravel-spgateway",
     "description": "spgateway library for laravel",
     "keywords": ["library", "spgateway"],
     "type": "library",
