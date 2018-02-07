@@ -404,7 +404,7 @@ class MPG
     ) {
         $postData = [
             'MerchantID'      => config('spgateway.mpg.MerchantID'),
-            'Version'         => '1.1',
+            'Version'         => config('spgateway.mpg.Version'),
             'RespondType'     => 'JSON',
             'TimeStamp'       => time(),
             'MerchantOrderNo' => $orderNo,
