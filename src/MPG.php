@@ -131,7 +131,8 @@ class MPG
         return view('spgateway::send-order',
         [
             'apiUrl' => $this->apiUrl['MPG_API'],
-            'order'  => $this->postDataEncrypted
+            // 'order'  => $this->postDataEncrypted
+            'order'  => $this->postData
         ]);
     }
 
@@ -403,7 +404,7 @@ class MPG
 
             $newCommodities = array_merge($newCommodities, $newCommodity);
         }
-        
+
         return$newCommodities;
     }
 
