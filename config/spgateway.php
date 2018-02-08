@@ -17,7 +17,9 @@ return [
         'HashIV'     => env('SPGATEWAY_HASH_IV', ''),
         'ReturnURL'  => env('SPGATEWAY_RETURN_URL', ''),
         'NotifyURL'  => env('SPGATEWAY_NOTIFY_URL', ''),
-        'Version'    => env('MPG_VERSION', ''),
+        'CustomerURL'  => env('SPGATEWAY_CUSTOMER_URL', ''),
+        'ClientBackURL'  => env('SPGATEWAY_CUSTOMER_URL', ''),
+        'Version'    => env('MPG_VERSION', 1.2),
     ],
 
     /*
@@ -43,8 +45,8 @@ return [
      */
     'receipt' =>
     [
-        'HashKey'    => env('SPGATEWAY_RECEIPT_KEY'),
-        'HashIV'     => env('SPGATEWAY_RECEIPT_IV'),
+        'HashKey'    => env('SPGATEWAY_RECEIPT_KEY', ''),
+        'HashIV'     => env('SPGATEWAY_RECEIPT_IV', ''),
         'MerchantID' => env('SPGATEWAY_RECEIPT_MERCHANT_ID', ''),
     ],
 ];

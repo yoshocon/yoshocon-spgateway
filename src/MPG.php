@@ -43,6 +43,8 @@ class MPG
     {
         try
         {
+            $timestamp = time();
+            $merchantOrderNo = $params['MerchantOrderNo'] ?? $this->helpers->generateOrderNo();
             $validator = $this->formValidator($amount, $itemDesc, $email, $params);
 
             if ($validator !== true) { throw new Exception($validator['field'] . $validator['message']); }
@@ -54,16 +56,16 @@ class MPG
                 'Email'           => $email,
                 'MerchantID'      => config('spgateway.mpg.MerchantID'),
                 'RespondType'     => 'JSON',
-                'TimeStamp'       => time(),
+                'TimeStamp'       => $timestamp,
                 'Version'         => config('spgateway.mpg.Version'),
-                'MerchantOrderNo' => $params['MerchantOrderNo'] ?? $this->helpers->generateOrderNo(),
+                'MerchantOrderNo' => $merchantOrderNo,
                 'LangType'        => $params['LangType'] ?? 'zh-tw',
-                'TradeLimit'      => $params['TradeLimit'] ?? 180,
+                'TradeLimit'      => $params['TradeLimit'] ?? null,
                 'ExpireDate'      => $params['ExpireDate'] ?? null,
-                'ReturnURL'       => $params['ReturnURL'] ?? null,
-                'NotifyURL'       => $params['NotifyURL'] ?? null,
-                'CustomerURL'     => $params['CustomerURL'] ?? null,
-                'ClientBackURL'   => $params['ClientBackURL'] ?? null,
+                'ReturnURL'       => $params['ReturnURL'] ?? config('spgateway.mpg.ReturnURL'),
+                'NotifyURL'       => $params['NotifyURL'] ?? config('spgateway.mpg.NotifyURL'),
+                'CustomerURL'     => $params['CustomerURL'] ?? config('spgateway.mpg.CustomerURL'),
+                'ClientBackURL'   => $params['ClientBackURL'] ?? config('spgateway.mpg.ClientBackURL'),
                 'EmailModify'     => $params['EmailModify'] ?? 1,
                 'LoginType'       => $params['LoginType'] ?? 0,
                 'OrderComment'    => $params['OrderComment'] ?? null,
@@ -90,10 +92,10 @@ class MPG
             [
                 'Amt'             => $amount,
                 'MerchantID'      => config('spgateway.mpg.MerchantID'),
-                'MerchantOrderNo' => $params['MerchantOrderNo'] ?? $this->helpers->generateOrderNo(),
-                'TimeStamp'       => time(),
+                'MerchantOrderNo' => $merchantOrderNo,
+                'TimeStamp'       => $timestamp,
                 'Version'         => config('spgateway.mpg.Version'),
-            ]
+            ];
 
             if (isset($params['Commodities']))
             {
@@ -306,7 +308,8 @@ class MPG
 
         $key = config('spgateway.mpg.HashKey');
         $iv = config('spgateway.mpg.HashIV');
-        return trim(bin2hex(openssl_encrypt($this->helpers->addPadding($return_str), 'aes-256-cbc', $key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv)));
+        return $return_str;
+        // return trim(bin2hex(openssl_encrypt($this->helpers->addPadding($return_str), 'aes-256-cbc', $key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv)));
     }
 
     private function createAES256decrypt($parameter = "")
