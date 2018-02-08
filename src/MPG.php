@@ -111,7 +111,7 @@ class MPG
     {
         $tradeInfo = $this->createMpgAesEncrypt($this->postData);
         $tradeSha = $this->createMpgSHA256Encrypt($tradeInfo);
-        $this->postData['checkValue'] = $tradeSha;
+        $this->postData['CheckValue'] = $tradeSha;
         $this->postDataEncrypted =
         [
             'MerchantID' => env('SPGATEWAY_MERCHANT_ID', config('spgateway.mpg.MerchantID')),
