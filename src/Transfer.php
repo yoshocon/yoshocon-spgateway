@@ -13,13 +13,8 @@ class Transfer
 
     public function __construct()
     {
-        if (env('APP_ENV') === 'production') {
-            $this->apiUrl['CHARGE_INSTRUCT_API']
-                = 'https://core.spgateway.com/API/ChargeInstruct';
-        } else {
-            $this->apiUrl['CHARGE_INSTRUCT_API']
-                = 'https://ccore.spgateway.com/API/ChargeInstruct';
-        }
+        if (env('APP_ENV') === 'production') { $this->apiUrl['CHARGE_INSTRUCT_API'] = 'https://core.spgateway.com/API/ChargeInstruct'; }
+        else { $this->apiUrl['CHARGE_INSTRUCT_API'] = 'https://ccore.spgateway.com/API/ChargeInstruct'; }
 
         $this->helpers = new Helpers();
     }
@@ -34,14 +29,11 @@ class Transfer
      *
      * @return $this|Transfer
      */
-    public function generate(
-        $merchantID,
-        $amount,
-        $feeType,
-        $balanceType
-    ) {
+    public function generate($merchantID, $amount, $feeType, $balanceType)
+    {
         // 智付通平台費用扣款必要資訊
-        $this->postData = [
+        $this->postData =
+        [
             'Version'     => '1.0',
             'TimeStamp'   => time(),
             'MerchantID'  => $merchantID,
@@ -49,7 +41,6 @@ class Transfer
             'FeeType'     => $feeType,
             'BalanceType' => $balanceType,
         ];
-
         return $this->encrypt();
     }
 
@@ -61,12 +52,11 @@ class Transfer
     public function encrypt()
     {
         $postData_ = $this->encryptPostData($this->postData);
-
-        $this->postDataEncrypted = [
+        $this->postDataEncrypted =
+        [
             'PartnerID_' => config('spgateway.PartnerID'),
             'PostData_'  => $postData_,
         ];
-
         return $this;
     }
 
@@ -77,21 +67,13 @@ class Transfer
      *
      * @return string
      */
-    public function encryptPostData(
-        $postData
-    ) {
+    public function encryptPostData($postData)
+    {
         // 所有資料與欄位使用 = 符號組合，並用 & 符號串起字串
         $postData = http_build_query($postData);
 
         // 加密字串
-        $post_data = trim(bin2hex(openssl_encrypt(
-            $this->helpers->addPadding($postData),
-            'AES-256-CBC',
-            config('spgateway.CompanyKey'),
-            OPENSSL_RAW_DATA | OPENSSL_NO_PADDING,
-            config('spgateway.CompanyIV')
-        )));
-
+        $post_data = trim(bin2hex(openssl_encrypt($this->helpers->addPadding($postData), 'AES-256-CBC', config('spgateway.CompanyKey'), OPENSSL_RAW_DATA | OPENSSL_NO_PADDING, config('spgateway.CompanyIV'))));
         return $post_data;
     }
 
@@ -104,26 +86,21 @@ class Transfer
      */
     public function send($headers = [])
     {
-        $res = $this->helpers->sendPostRequest(
-            $this->apiUrl['CHARGE_INSTRUCT_API'],
-            $this->postDataEncrypted,
-            $headers
-        );
-
+        $res = $this->helpers->sendPostRequest($this->apiUrl['CHARGE_INSTRUCT_API'], $this->postDataEncrypted, $headers );
         $result = json_decode($res);
 
-        if ($result->Status === 'SUCCESS') {
-            $result->Result = json_decode($result->Result);
-        }
+        if ($result->Status === 'SUCCESS') { $result->Result = json_decode($result->Result); }
 
         return $result;
     }
 
-    public function getPostData(){
+    public function getPostData()
+    {
         return $this->postData;
     }
 
-    public function getPostDataEncrypted(){
+    public function getPostDataEncrypted()
+    {
         return $this->postDataEncrypted;
     }
 }

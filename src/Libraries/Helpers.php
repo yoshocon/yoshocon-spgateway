@@ -30,11 +30,8 @@ class Helpers
      *
      * @return string
      */
-    public function encryptPostData(
-        $postData,
-        $key = null,
-        $iv = null
-    ) {
+    public function encryptPostData($postData, $key = null, $iv = null)
+    {
         // 所有資料與欄位使用 = 符號組合，並用 & 符號串起字串
         $postData = http_build_query($postData);
 
@@ -46,14 +43,11 @@ class Helpers
             OPENSSL_RAW_DATA | OPENSSL_NO_PADDING,
             $iv ?? config('spgateway.mpg.HashIV')
         )));
-
         return $post_data;
     }
 
-    public function addPadding(
-        $string,
-        $blocksize = 32
-    ) {
+    public function addPadding($string, $blocksize = 32)
+    {
         $len = strlen($string);
         $pad = $blocksize - ($len % $blocksize);
         $string .= str_repeat(chr($pad), $pad);
@@ -62,14 +56,9 @@ class Helpers
 
     public function sendPostRequest($url, $postData, $headers = [])
     {
-        return $this->client
-            ->request(
-                'POST',
-                $url,
-                ['form_params' => $postData, 'headers' => $headers]
-            )
-            ->getBody()
-            ->getContents();
+        return $this->client->request('POST', $url, ['form_params' => $postData, 'headers' => $headers])
+                            ->getBody()
+                            ->getContents();
     }
 
     /**
