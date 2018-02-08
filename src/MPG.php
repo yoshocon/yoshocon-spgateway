@@ -111,12 +111,13 @@ class MPG
     {
         $tradeInfo = $this->createMpgAesEncrypt($this->postData);
         $tradeSha = $this->createMpgSHA256Encrypt($tradeInfo);
-        $this->postData['CheckValue'] = $tradeSha;
+        // $this->postData['CheckValue'] = $tradeSha;
         $this->postDataEncrypted =
         [
             'MerchantID' => env('SPGATEWAY_MERCHANT_ID', config('spgateway.mpg.MerchantID')),
             'TradeInfo'  => $tradeInfo,
             'TradeSha'   => $tradeSha,
+            'TimeStamp'  => time(),
             'Version'    => config('spgateway.mpg.Version'),
         ];
         return $this;
@@ -132,8 +133,8 @@ class MPG
         return view('spgateway::send-order',
         [
             'apiUrl' => $this->apiUrl['MPG_API'],
-            'order'  => $this->postData
-            // 'order'  => $this->postDataEncrypted
+            // 'order'  => $this->postData
+            'order'  => $this->postDataEncrypted
         ]);
     }
 
