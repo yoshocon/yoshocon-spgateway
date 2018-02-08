@@ -86,6 +86,15 @@ class MPG
                 'Tel2'            => $params['Tel2'] ?? null,
             ];
 
+            $encryptData =
+            [
+                'Amt'             => $amount,
+                'MerchantID'      => config('spgateway.mpg.MerchantID'),
+                'MerchantOrderNo' => $params['MerchantOrderNo'] ?? $this->helpers->generateOrderNo(),
+                'TimeStamp'       => time(),
+                'Version'         => config('spgateway.mpg.Version'),
+            ]
+
             if (isset($params['Commodities']))
             {
                 $postData['Count'] = count($params['Commodities']);
@@ -97,6 +106,7 @@ class MPG
                 return ($value !== null && $value !== false && $value !== '');
             });
             $this->postData = $postData;
+            $this->encryptData = $encryptData;
             return $this->encrypt();
         }
         catch (Exception $e) { return $e; }
@@ -109,15 +119,15 @@ class MPG
      */
     public function encrypt()
     {
-        $tradeInfo = $this->createMpgAesEncrypt($this->postData);
+        // $tradeInfo = $this->createMpgAesEncrypt($this->postData);
+        $tradeInfo = $this->createMpgAesEncrypt($this->encryptData);
         $tradeSha = $this->createMpgSHA256Encrypt($tradeInfo);
-        // $this->postData['CheckValue'] = $tradeSha;
+        $this->postData['CheckValue'] = $tradeSha;
         $this->postDataEncrypted =
         [
             'MerchantID' => env('SPGATEWAY_MERCHANT_ID', config('spgateway.mpg.MerchantID')),
             'TradeInfo'  => $tradeInfo,
             'TradeSha'   => $tradeSha,
-            'TimeStamp'  => time(),
             'Version'    => config('spgateway.mpg.Version'),
         ];
         return $this;
@@ -133,8 +143,8 @@ class MPG
         return view('spgateway::send-order',
         [
             'apiUrl' => $this->apiUrl['MPG_API'],
-            // 'order'  => $this->postData
-            'order'  => $this->postDataEncrypted
+            'order'  => $this->postData
+            // 'order'  => $this->postDataEncrypted
         ]);
     }
 
