@@ -12,14 +12,14 @@ return [
      */
     'mpg' =>
     [
-        'MerchantID' => env('SPGATEWAY_MERCHANT_ID', ''),
-        'HashKey'    => env('SPGATEWAY_HASH_KEY', ''),
-        'HashIV'     => env('SPGATEWAY_HASH_IV', ''),
-        'ReturnURL'  => env('SPGATEWAY_RETURN_URL', ''),
-        'NotifyURL'  => env('SPGATEWAY_NOTIFY_URL', ''),
-        'CustomerURL'  => env('SPGATEWAY_CUSTOMER_URL', ''),
-        'ClientBackURL'  => env('SPGATEWAY_CUSTOMER_URL', ''),
-        'Version'    => env('MPG_VERSION', 1.2),
+        'MerchantID'    => env('SPGATEWAY_MERCHANT_ID', ''),
+        'HashKey'       => env('SPGATEWAY_HASH_KEY', ''),
+        'HashIV'        => env('SPGATEWAY_HASH_IV', ''),
+        'ReturnURL'     => env('SPGATEWAY_RETURN_URL', ''),
+        'NotifyURL'     => env('SPGATEWAY_NOTIFY_URL', ''),
+        'CustomerURL'   => env('SPGATEWAY_CUSTOMER_URL', ''),
+        'ClientBackURL' => env('SPGATEWAY_CLIENT_BACK_URL', ''),
+        'Version'       => env('MPG_VERSION', 1.2),
     ],
 
     /*
