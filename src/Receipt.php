@@ -46,22 +46,22 @@ class Receipt
     {
         $params['TaxRate'] = $params['TaxRate'] ?? 5;
         $params['Category'] = $params['Category'] ?? 'B2C';
-        $itemAmt = [];
-
-        foreach ($params['ItemCount'] as $k => $v)
-        {
-            if ($params['Category'] === 'B2B')
-            {
-                $itemAmt[$k] = $this->priceBeforeTax($params['ItemCount'][$k] * $params['ItemPrice'][$k], $params['TaxRate']);
-            }
-            else { $itemAmt[$k] = $params['ItemCount'][$k] * $params['ItemPrice'][$k]; }
-        }
+        // $itemAmt = [];
+        //
+        // foreach ($params['ItemCount'] as $k => $v)
+        // {
+        //     if ($params['Category'] === 'B2B')
+        //     {
+        //         $itemAmt[$k] = $this->priceBeforeTax($params['ItemCount'][$k] * $params['ItemPrice'][$k], $params['TaxRate']);
+        //     }
+        //     else { $itemAmt[$k] = $params['ItemCount'][$k] * $params['ItemPrice'][$k]; }
+        // }
 
         $params['ItemName'] = implode('|', $params['ItemName']);
         $params['ItemCount'] = implode('|', $params['ItemCount']);
         $params['ItemUnit'] = implode('|', $params['ItemUnit']);
         $params['ItemPrice'] = implode('|', $params['ItemPrice']);
-        $params['ItemAmt'] = implode('|', $itemAmt);
+        $params['ItemAmt'] = implode('|', $params['ItemAmt']);
 
         // 智付通開立電子發票必要資訊
         $postData =
@@ -71,33 +71,35 @@ class Receipt
             'TimeStamp'        => time(),
             'TransNum'         => $params['TransNum'] ?? null,
             'MerchantOrderNo'  => $params['MerchantOrderNo'] ?? $this->helpers->generateOrderNo(),
-            'Status'           => $params['Status'] ?? '1',
             'CreateStatusTime' => $params['CreateStatusTime'] ?? null,
-            'Category'         => $params['Category'] ?? 'B2C',
             'BuyerName'        => $params['BuyerName'],
             'BuyerUBN'         => $params['BuyerUBN'] ?? null,
-            'BuyerAddress'     => $params['BuyerAddress'] ?? null,
             'BuyerEmail'       => $params['BuyerEmail'],
-            'CarrierType'      => $params['CarrierType'] ?? null,
-            'CarrierNum'       => $params['CarrierNum'] ?? null,
-            'LoveCode'         => $params['LoveCode'] ?? null,
-            'PrintFlag'        => $params['PrintFlag'] ?? 'Y',
+            'BuyerPhone'       => $params['BuyerPhone'],
+            'Category'         => $params['Category'] ?? 'B2C',
+            'BuyerAddress'     => $params['BuyerAddress'] ?? null,
             'TaxType'          => $params['TaxType'] ?? '1',
             'TaxRate'          => $params['TaxRate'] ?? 5,
-            'CustomsClearance' => $params['CustomsClearance'] ?? null,
             'Amt'              => $this->priceBeforeTax($params['TotalAmt'], $params['TaxRate']),
-            'AmtSales'         => $params['AmtSales'] ?? null,
-            'AmtZero'          => $params['AmtZero'] ?? null,
-            'AmtFree'          => $params['AmtFree'] ?? null,
             'TaxAmt'           => $this->calcTax($params['TotalAmt'], $params['TaxRate']),
             'TotalAmt'         => $params['TotalAmt'],
+            'CarrierType'      => $params['CarrierType'] ?? null,
+            'CarrierNum'       => rawurlencode($params['CarrierNum']) ?? null,
+            'LoveCode'         => $params['LoveCode'] ?? null,
+            'PrintFlag'        => $params['PrintFlag'] ?? 'Y',
             'ItemName'         => $params['ItemName'],
             'ItemCount'        => $params['ItemCount'],
             'ItemUnit'         => $params['ItemUnit'],
-            'ItemPrice'        => $params['ItemPrice'],
             'ItemAmt'          => $params['ItemAmt'],
+            'ItemPrice'        => $params['ItemPrice'],
+            'Comment'          => $params['Comment'] ?? null,
+            'Status'           => $params['Status'] ?? '1',
+            'CustomsClearance' => $params['CustomsClearance'] ?? null,
+            'AmtSales'         => $params['AmtSales'] ?? null,
+            'AmtZero'          => $params['AmtZero'] ?? null,
+            'AmtFree'          => $params['AmtFree'] ?? null,
             'ItemTaxType'      => $params['ItemTaxType'] ?? null,
-            'Comment'          => $params['Comment'] ?? null
+            'CreateStatusTime' => $params['CreateStatusTime'] ?? null,
         ];
         $this->postData = array_filter($postData, function ($value) { return ($value !== null && $value !== false && $value !== ''); });
         return $this->encrypt();
@@ -110,7 +112,7 @@ class Receipt
      */
     private function encrypt()
     {
-        $postDataEncrypted = $this->helpers->encryptPostData($this->postData);
+        $postDataEncrypted = $this->helpers->encryptReceiptPostData($this->postData);
         $this->postDataEncrypted =
         [
             'MerchantID_' => config('spgateway.receipt.MerchantID'),
@@ -245,7 +247,6 @@ class Receipt
         ];
         return $this;
     }
-
 
     /**
      * 送出作廢電子發票請求到智付通

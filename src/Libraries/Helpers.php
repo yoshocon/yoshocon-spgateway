@@ -30,6 +30,22 @@ class Helpers
      *
      * @return string
      */
+    public function encryptReceiptPostData($postData, $key = null, $iv = null)
+    {
+        // 所有資料與欄位使用 = 符號組合，並用 & 符號串起字串
+        $postData = http_build_query($postData);
+
+        // 加密字串
+        $post_data = trim(bin2hex(openssl_encrypt(
+            $this->addPadding($postData),
+            'AES-256-CBC',
+            config('spgateway.receipt.HashKey'),
+            OPENSSL_RAW_DATA | OPENSSL_NO_PADDING,
+            config('spgateway.receipt.HashIV')
+        )));
+        return $post_data;
+    }
+
     public function encryptPostData($postData, $key = null, $iv = null)
     {
         // 所有資料與欄位使用 = 符號組合，並用 & 符號串起字串
@@ -39,9 +55,9 @@ class Helpers
         $post_data = trim(bin2hex(openssl_encrypt(
             $this->addPadding($postData),
             'AES-256-CBC',
-            $key ?? config('spgateway.mpg.HashKey'),
+            config('spgateway.mpg.HashKey'),
             OPENSSL_RAW_DATA | OPENSSL_NO_PADDING,
-            $iv ?? config('spgateway.mpg.HashIV')
+            config('spgateway.mpg.HashIV')
         )));
         return $post_data;
     }
